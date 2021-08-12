@@ -1,0 +1,63 @@
+rooms = {
+    'Entrance':{'West':'Tower','Item':'Nothing'},
+    'Tower':{'North':'Hall','Item':'Iron'},
+    'Hall':{'West':'Storage','North': 'Kitchen','South': 'Tower', 'East' :'Attic', 'Item':'Lapis lazuli'},
+    'Attic':{'North':'Basement','Item':'Emerald'},
+    'Kitchen':{'East':'Axela Bedroom','South':'Hall','Item':'Diamond'},
+    'Basement':{'South':'Entrance','Item':'Gold'},
+    'Storage':{'East':'Entrance','Item':'Silver'},
+    'Axela Bedroom':{'West': 'Kitchen'}
+    
+    }
+state = 'Entrance'
+def get_new_state(state,direction):
+    new_state = state 
+    for i in rooms:
+        if i==state:
+            if direction in rooms[i]:
+                new_state=rooms[i][direction]
+    return new_state 
+    
+def get_item(state):
+    return rooms[state]['Item']
+    
+def show_instructions():
+    print('The Advent of Axela')
+    print('---------------------')
+    print('The evil Axela has stolen your belongings. In the midst of chasing Axela through her house she has dropped your items')
+    print('Your goal is to navigate through Axela’s house and get your items back without running into her!')
+    print('-----------------------------------------------------------------------------------------------------------------------')
+    print('Move commands: go South, go North, go East, go West')
+    print("Add to Inventory: get 'item_name'")
+    print('------------------------------------------------------')
+    
+show_instructions()
+Inventory=[]
+items = ['Gold', 'Silver', 'Iron', 'Diamond', 'Emerald', 'Lapis lazuli']
+while(1):
+    print('You are in ',state)
+    print('Inventory:',Inventory)
+    item = get_item(state)
+    print('You see',item)
+    print('--------------------')
+    if item=='Axela':
+        print('NOM NOM...GAME OVER!')
+        exit(0)
+    direction = input('Enter your move: ')
+    if direction == 'go East' or direction=='go West' or direction=='go North' or direction=='go South':
+        direction=direction[3:]
+        new_state=get_new_state(state,direction)
+        if new_state==state:
+            print('The room has wall in that direction enter other direction!')
+        else:
+            state=new_state
+    elif direction==str('get '+item):
+        if item in Inventory:
+            print('Item already taken go to another room!!')
+        else:
+            Inventory.append(item)
+    else:
+        print('Invalid input or move or item')
+    if len(Inventory)==6:
+        print('Congratulations! You have collected all items and defeated the dragon!')
+        exit(0)
